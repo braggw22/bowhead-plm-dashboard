@@ -1,180 +1,118 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bowhead PLM Dashboard</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bowhead PLM Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
-    <div id="app">
-        <nav id="sidebar">
-            <h2 class="logo">Bowhead PLM</h2>
-            <ul>
-                <li data-view="dashboard" class="active"><i class="fas fa-home"></i> Dashboard</li>
-                <li data-view="tasks"><i class="fas fa-tasks"></i> Tasks</li>
-                <li data-view="risks"><i class="fas fa-exclamation-triangle"></i> Risks</li>
-                <li data-view="tagups"><i class="fas fa-comment-dots"></i> Tag-Ups</li>
-                <li data-view="deliverables"><i class="fas fa-clipboard-list"></i> Deliverables</li>
-                <li data-view="metrics"><i class="fas fa-chart-bar"></i> Metrics</li>
-                <li data-view="settings"><i class="fas fa-cog"></i> Settings</li>
-            </ul>
-            <div class="theme-toggle">
-                <label class="switch">
-                    <input type="checkbox" id="themeToggle">
-                    <span class="slider"></span>
-                </label>
-                <span>Dark Mode</span>
-            </div>
-        </nav>
-        <main id="mainContent">
-            <!-- Dashboard View -->
-            <section id="dashboardView" class="view active">
-                <h1>Dashboard</h1>
-                <div class="cards-container">
-                    <div class="card" id="tasksOverview">
-                        <h3>Tasks Overview</h3>
-                        <p><span id="openTasksCount">0</span> Open / <span id="closedTasksCount">0</span> Closed</p>
-                    </div>
-                    <div class="card" id="risksOverview">
-                        <h3>Risks Overview</h3>
-                        <p><span id="openRisksCount">0</span> Open / <span id="mitigatedRisksCount">0</span> Mitigated</p>
-                    </div>
-                    <div class="card" id="deliverablesOverview">
-                        <h3>Deliverables</h3>
-                        <p><span id="deliverablesInProgressCount">0</span> In Progress / <span id="deliverablesCompleteCount">0</span> Complete</p>
-                    </div>
-                    <div class="card" id="tagupOverview">
-                        <h3>Tag-Up Participation</h3>
-                        <p><span id="tagupParticipationCount">0</span> Team Members Participated</p>
-                    </div>
-                </div>
-                <div class="charts-container">
-                    <canvas id="tasksPerMemberChart"></canvas>
-                    <canvas id="workloadSaturationChart"></canvas>
-                    <canvas id="deliverableCompletionChart"></canvas>
-                </div>
-            </section>
-            <!-- Tasks View -->
-            <section id="tasksView" class="view">
-                <h1>Tasks</h1>
-                <form id="taskForm">
-                    <input type="text" id="taskTitle" placeholder="Task Title" required>
-                    <select id="taskOwner">
-                        <option value="">Select Owner</option>
-                    </select>
-                    <input type="date" id="taskDueDate" required>
-                    <select id="taskPriority">
-                        <option value="Low">Low</option>
-                        <option value="Medium">Medium</option>
-                        <option value="High">High</option>
-                    </select>
-                    <input type="number" id="taskStatus" placeholder="% Complete" min="0" max="100" required>
-                    <button type="submit">Add Task</button>
-                </form>
-                <table id="tasksTable">
-                    <thead>
-                        <tr>
-                            <th data-sort="id">ID</th>
-                            <th data-sort="title">Title</th>
-                            <th data-sort="owner">Owner</th>
-                            <th data-sort="dueDate">Due Date</th>
-                            <th data-sort="priority">Priority</th>
-                            <th data-sort="status">Status</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-            </section>
-            <!-- Risks View -->
-            <section id="risksView" class="view">
-                <h1>Risks</h1>
-                <form id="riskForm">
-                    <input type="text" id="riskTitle" placeholder="Risk Title" required>
-                    <select id="riskOwner">
-                        <option value="">Select Owner</option>
-                    </select>
-                    <select id="riskSeverity">
-                        <option value="Low">Low</option>
-                        <option value="Medium">Medium</option>
-                        <option value="High">High</option>
-                    </select>
-                    <input type="text" id="riskDescription" placeholder="Description" required>
-                    <select id="riskStatus">
-                        <option value="Open">Open</option>
-                        <option value="Mitigated">Mitigated</option>
-                    </select>
-                    <button type="submit">Add Risk</button>
-                </form>
-                <table id="risksTable">
-                    <thead>
-                        <tr>
-                            <th data-sort="id">ID</th>
-                            <th data-sort="title">Title</th>
-                            <th data-sort="owner">Owner</th>
-                            <th data-sort="severity">Severity</th>
-                            <th data-sort="status">Status</th>
-                            <th data-sort="timestamp">Timestamp</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-            </section>
-            <!-- Tag-Ups View -->
-            <section id="tagupsView" class="view">
-                <h1>Daily Tag-Ups</h1>
-                <div id="tagupFormsContainer"></div>
-                <div id="tagupEntriesContainer"></div>
-            </section>
-            <!-- Deliverables View -->
-            <section id="deliverablesView" class="view">
-                <h1>Deliverables</h1>
-                <form id="deliverableForm">
-                    <input type="text" id="deliverableName" placeholder="Deliverable Name" required>
-                    <select id="deliverableOwner">
-                        <option value="">Select Owner</option>
-                    </select>
-                    <input type="date" id="deliverableDueDate" required>
-                    <input type="number" id="deliverableProgress" placeholder="% Complete" min="0" max="100" required>
-                    <input type="text" id="deliverableNotes" placeholder="Notes">
-                    <button type="submit">Add Deliverable</button>
-                </form>
-                <table id="deliverablesTable">
-                    <thead>
-                        <tr>
-                            <th data-sort="id">ID</th>
-                            <th data-sort="name">Name</th>
-                            <th data-sort="owner">Owner</th>
-                            <th data-sort="dueDate">Due Date</th>
-                            <th data-sort="progress">Progress</th>
-                            <th data-sort="notes">Notes</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-            </section>
-            <!-- Metrics View -->
-            <section id="metricsView" class="view">
-                <h1>Metrics</h1>
-                <div class="metrics-container">
-                    <div class="metric-card" id="workloadMetric">
-                        <h3>Workload Saturation</h3>
-                        <canvas id="workloadMetricChart"></canvas>
-                    </div>
-                </div>
-            </section>
-            <!-- Settings View -->
-            <section id="settingsView" class="view">
-                <h1>Settings</h1>
-                <button id="exportData">Export Data</button>
-                <input type="file" id="importData" accept="application/json">
-                <button id="resetData">Reset Dashboard</button>
-            </section>
-        </main>
+  <nav id="sidebar">
+    <div class="logo">
+      <div class="logo-placeholder">BOWHEAD PROFESSIONAL &amp; TECHNICAL SOLUTIONS</div>
     </div>
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-    <script src="app.js"></script>
+    <ul>
+      <li data-view="dashboard" class="active">Dashboard</li>
+      <li data-view="tasks">Tasks</li>
+      <li data-view="risks">Risks</li>
+      <li data-view="tagUps">Tag-Ups</li>
+      <li data-view="deliverables">Deliverables</li>
+      <li data-view="metrics">Metrics</li>
+      <li data-view="settings">Settings</li>
+    </ul>
+  </nav>
+  <div id="content">
+    <div id="topBar">
+      <input type="text" id="searchBar" placeholder="Search...">
+      <button id="exportPdfBtn">Export PDF</button>
+      <button id="toggleHeatmap">Toggle Heatmap</button>
+      <button id="toggleFeedBtn">Toggle Feed</button>
+      <button id="toggleThemeBtn">Theme</button>
+      <button id="resetDashboardBtn">Reset</button>
+      <button id="exportDataBtn">Export Data</button>
+      <button id="importDataBtn">Import Data</button>
+      <input type="file" id="importDataInput" style="display:none" accept="application/json">
+    </div>
+
+    <!-- Dashboard View -->
+    <div id="dashboardView" class="view active-view">
+      <div class="cards" id="dashboardCards"></div>
+      <div class="charts">
+        <canvas id="taskChart"></canvas>
+        <canvas id="workloadChart" style="display:none"></canvas>
+      </div>
+    </div>
+
+    <!-- Tasks View -->
+    <div id="tasksView" class="view">
+      <h2>Tasks</h2>
+      <div class="table-container">
+        <table id="tasksTable">
+          <thead>
+            <tr><th>ID</th><th>Title</th><th>Owner</th><th>Due Date</th><th>Priority</th><th>Status</th><th>% Complete</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Risks View -->
+    <div id="risksView" class="view">
+      <h2>Risks</h2>
+      <div class="table-container">
+        <table id="risksTable">
+          <thead>
+            <tr><th>Title</th><th>Owner</th><th>Severity</th><th>Description</th><th>Status</th><th>Created</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Tag-Ups View -->
+    <div id="tagUpsView" class="view">
+      <h2>Daily Tag-Ups</h2>
+      <div id="tagUpsContainer"></div>
+    </div>
+
+    <!-- Deliverables View -->
+    <div id="deliverablesView" class="view">
+      <h2>Deliverables</h2>
+      <div class="table-container">
+        <table id="deliverablesTable">
+          <thead>
+            <tr><th>Name</th><th>Owner</th><th>Due Date</th><th>Progress</th><th>Notes</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Metrics View -->
+    <div id="metricsView" class="view">
+      <h2>Metrics</h2>
+      <canvas id="metricsChart"></canvas>
+    </div>
+
+    <!-- Settings View -->
+    <div id="settingsView" class="view">
+      <h2>Settings</h2>
+      <button id="exportFeedPdfBtn">Export Activity PDF</button>
+    </div>
+  </div>
+
+  <aside id="activityFeed" class="closed">
+    <div class="feed-header">
+      <h3>Activity Feed</h3>
+      <button id="exportFeedPdfBtn">Export Feed</button>
+    </div>
+    <ul id="feedList"></ul>
+  </aside>
+
+  <script src="app.js"></script>
 </body>
 </html>
