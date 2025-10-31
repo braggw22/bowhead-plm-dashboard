@@ -1,0 +1,97 @@
+{
+  "tasks": [
+    {
+      "title": "Initial project setup",
+      "owner": "Brian Burrer",
+      "dueDate": "2025-11-05",
+      "priority": "High",
+      "status": "Complete",
+      "created": "2025-10-31 09:00"
+    },
+    {
+      "title": "Define system architecture",
+      "owner": "Chase Cole",
+      "dueDate": "2025-11-10",
+      "priority": "Medium",
+      "status": "In Progress",
+      "created": "2025-10-31 09:30"
+    },
+    {
+      "title": "Draft risk assessment",
+      "owner": "Gavin Lasater",
+      "dueDate": "2025-11-15",
+      "priority": "Low",
+      "status": "Not Started",
+      "created": "2025-10-31 10:00"
+    }
+  ],
+  "risks": [
+    {
+      "title": "Schedule delay due to resource constraints",
+      "owner": "Brian Burrer",
+      "severity": "High",
+      "description": "Limited team resources may delay the design phase.",
+      "status": "Open",
+      "created": "2025-10-31 09:15"
+    },
+    {
+      "title": "Uncertainty in technical requirements",
+      "owner": "Chase Cole",
+      "severity": "Medium",
+      "description": "Changing technical specs from the client side could affect system design.",
+      "status": "Open",
+      "created": "2025-10-31 09:45"
+    }
+  ],
+  "tagUps": {
+    "Brian Burrer": [
+      {
+        "didToday": "Completed initial project setup and environment configuration.",
+        "issues": "Need access to additional documentation.",
+        "nextSteps": "Begin drafting system architecture.",
+        "date": "2025-10-31"
+      }
+    ],
+    "Chase Cole": [
+      {
+        "didToday": "Worked on defining system architecture.",
+        "issues": "Awaiting feedback on architecture proposal.",
+        "nextSteps": "Finalize architecture and start risk assessment.",
+        "date": "2025-10-31"
+      }
+    ],
+    "Gavin Lasater": [
+      {
+        "didToday": "Reviewed risk assessment template.",
+        "issues": "None",
+        "nextSteps": "Draft risk assessment for review.",
+        "date": "2025-10-31"
+      }
+    ],
+    "Holocom (Subcontractor)": [],
+    "(Open Slot for future member)": []
+  },
+  "deliverables": [
+    {
+      "name": "System Architecture Document",
+      "owner": "Chase Cole",
+      "dueDate": "2025-11-20",
+      "progress": 30,
+      "notes": "Initial outline drafted."
+    },
+    {
+      "name": "Risk Assessment Report",
+      "owner": "Gavin Lasater",
+      "dueDate": "2025-11-25",
+      "progress": 0,
+      "notes": "Awaiting draft."
+    },
+    {
+      "name": "Project Plan",
+      "owner": "Brian Burrer",
+      "dueDate": "2025-11-12",
+      "progress": 80,
+      "notes": "Final review pending."
+    }
+  ]
+}
